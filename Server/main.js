@@ -30,7 +30,8 @@ app.get("/", function(req, res){
 
 app.post("/contact", function(req, res){
     const {name, email, date, phone, message} = req.body;
-
+    try {
+        
     const contact_data = 'INSERT INTO contacttable (name, email, date, phone, message) VALUES ($1, $2, $3, $4, $5)';
     cnct.query(contact_data, [name, email, date, phone, message], (err, result)=>{
         if(err){
@@ -42,11 +43,15 @@ app.post("/contact", function(req, res){
             });
         }
     });
+    } catch (error) {
+        console.log(error);
+    }
 })
 
 app.get("/client", function(req, res){
 
-    const fetch_query = "SELECT * FROM contacttable ORDER BY date DESC";
+    try {
+         const fetch_query = "SELECT * FROM contacttable ORDER BY date DESC";
     cnct.query(fetch_query, (err, result)=>{
         if(err){
             res.status(401).send(err.message);
@@ -54,6 +59,10 @@ app.get("/client", function(req, res){
             res.status(200).send(result.rows);
         }
     })
+    } catch (error) {
+        console.log(error);
+    }
+   
 })
 
 app.listen(3000, function(){
